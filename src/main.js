@@ -2,8 +2,13 @@ import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import pixabayApi from './js/pixabay-api';
+import picture from './js/render-functions';
+const input = document.querySelector('.searchImages');
+const form = document.querySelector('form');
+const gallery = document.querySelector('.gallery');
 const loadingInfo = document.querySelector('.loadingMessage');
-
+const searchButton = document.querySelector('.search_btn');
 loadingInfo.style.display = 'none';
 
 
@@ -16,56 +21,36 @@ const error = () => {
   });
 };
 
-<<<<<<< Updated upstream
-import pixabayApi from './js/pixabay-api';
-import picture from './js/render-functions';
-const input = document.querySelector('.searchImages');
-const form = document.querySelector('form');
-
-=======
 let text = '';
 let page = 1;
 let per_page = 15;
 const isLastPage = total =>  Math.ceil(total/per_page) === page;
->>>>>>> Stashed changes
 
-
-
-const gallery = document.querySelector('.gallery');
-
-let text = '';
-
-form.addEventListener('submit', e => {
+form.addEventListener('submit', async e => {
   e.preventDefault();
   loadingInfo.style.display = 'block';
   text = input.value;
 
-<<<<<<< Updated upstream
-  pixabayApi
-    .getImages(text)
-    .then(data => {
-      const { hits } = data;
-      const galleryItems = hits.map(imgItem => picture.createImages(imgItem));
+  try {
+    const data = await pixabayApi.getImages(text, page, per_page);
+    const { hits } = data;
+    const galleryItems = hits.map(imgItem => picture.createImages(imgItem));
 
-      if (galleryItems.length === 0) error();
-      gallery.innerHTML = '';
-      loadingInfo.style.display = 'none';
-      gallery.append(...galleryItems);
-
-      const lightbox = new SimpleLightbox('.gallery a', {
-        captionsData: 'alt',
-        captionDelay: 250,
-        captionPosition: 'bottom',
-      });
-
-      lightbox.refresh();
-    })
-    .catch(err => {
-      console.log(err);
-      error();
+    if (galleryItems.length === 0) error();
+    gallery.innerHTML = '';
+    loadingInfo.style.display = 'none';
+    gallery.append(...galleryItems);
+    
+    const lightbox = new SimpleLightbox('.gallery a', {
+      captionsData: 'alt',
+      captionDelay: 250,
+      captionPosition: 'bottom',
     });
-});
-=======
+
+ searchButton.style.display = 'block';
+
+    lightbox.refresh();
+
   } catch (err) {
     loadingInfo.style.display = 'none';
     
@@ -106,4 +91,3 @@ searchButton.addEventListener('click',async e => {
     error();
   }
 });
->>>>>>> Stashed changes
