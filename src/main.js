@@ -6,6 +6,7 @@ const loadingInfo = document.querySelector('.loadingMessage');
 
 loadingInfo.style.display = 'none';
 
+
 const error = () => {
   iziToast.error({
     title: 'Attention',
@@ -15,11 +16,18 @@ const error = () => {
   });
 };
 
+<<<<<<< Updated upstream
 import pixabayApi from './js/pixabay-api';
 import picture from './js/render-functions';
 const input = document.querySelector('.searchImages');
 const form = document.querySelector('form');
 
+=======
+let text = '';
+let page = 1;
+let per_page = 15;
+const isLastPage = total =>  Math.ceil(total/per_page) === page;
+>>>>>>> Stashed changes
 
 
 
@@ -32,6 +40,7 @@ form.addEventListener('submit', e => {
   loadingInfo.style.display = 'block';
   text = input.value;
 
+<<<<<<< Updated upstream
   pixabayApi
     .getImages(text)
     .then(data => {
@@ -56,3 +65,45 @@ form.addEventListener('submit', e => {
       error();
     });
 });
+=======
+  } catch (err) {
+    loadingInfo.style.display = 'none';
+    
+    error();
+  }
+});
+
+searchButton.addEventListener('click',async e => {
+  try {
+  e.preventDefault();
+  page += 1;
+  const data = await pixabayApi.getImages(text, page, per_page);
+  const { hits, totalHits } = data;
+  const galleryItems = hits.map(imgItem => picture.createImages(imgItem));
+
+  if (galleryItems.length === 0) error();
+    
+  loadingInfo.style.display = 'none';
+  gallery.append(...galleryItems);
+ 
+  if (isLastPage(totalHits)) { 
+    searchButton.style.display = 'none';
+  console.log(totalHits);
+  error();
+    
+} else {
+  searchButton.style.display = 'block';
+}
+
+  const lightbox = new SimpleLightbox('.gallery a', {
+    captionsData: 'alt',
+    captionDelay: 250,
+    captionPosition: 'bottom',
+  });
+
+  lightbox.refresh();
+  } catch (err) {
+    error();
+  }
+});
+>>>>>>> Stashed changes
