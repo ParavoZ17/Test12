@@ -10,13 +10,14 @@ const gallery = document.querySelector('.gallery');
 const loadingInfo = document.querySelector('.loadingMessage');
 const searchButton = document.querySelector('.search_btn');
 loadingInfo.style.display = 'none';
+const NOMOREIMAGES = "We're sorry, but you've reached the end of search results.";
+const NOIMAGES ='Sorry, there are no images matching your search query. Please try again!'
+const ERROR = 'Sorry, somthimg went wrong...'
 
-
-const error = () => {
+const error = (sms) => {
   iziToast.error({
     title: 'Attention',
-    message:
-      'Sorry, there are no images matching your search query. Please try again!',
+    message: sms,
     position: 'topRight',
   });
 };
@@ -30,13 +31,16 @@ form.addEventListener('submit', async e => {
   e.preventDefault();
   loadingInfo.style.display = 'block';
   text = input.value;
-
+  if (text == 0) {
+    loadingInfo.style.display = 'none';
+    return error(`Search text cant be empty!`)}
+  page = 1;
   try {
     const data = await pixabayApi.getImages(text, page, per_page);
     const { hits } = data;
     const galleryItems = hits.map(imgItem => picture.createImages(imgItem));
 
-    if (galleryItems.length === 0) error();
+    if (galleryItems.length === 0) error(NOIMAGES);
     gallery.innerHTML = '';
     loadingInfo.style.display = 'none';
     gallery.append(...galleryItems);
@@ -47,14 +51,20 @@ form.addEventListener('submit', async e => {
       captionPosition: 'bottom',
     });
 
- searchButton.style.display = 'block';
+    if (isLastPage(totalHits)) { 
+      searchButton.style.display = 'none';
+    error(NOMOREIMAGES);
+      
+  } else {
+    searchButton.style.display = 'block';
+  }
 
     lightbox.refresh();
 
   } catch (err) {
     loadingInfo.style.display = 'none';
     
-    error();
+    error(ERROR);
   }
 });
 
@@ -73,8 +83,7 @@ searchButton.addEventListener('click',async e => {
  
   if (isLastPage(totalHits)) { 
     searchButton.style.display = 'none';
-  console.log(totalHits);
-  error();
+  error(NOMOREIMAGES);
     
 } else {
   searchButton.style.display = 'block';
@@ -88,6 +97,7 @@ searchButton.addEventListener('click',async e => {
 
   lightbox.refresh();
   } catch (err) {
-    error();
+    error(ERROR);
+    console.log(err)
   }
 });
