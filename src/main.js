@@ -1,3 +1,4 @@
+
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import SimpleLightbox from 'simplelightbox';
@@ -11,11 +12,13 @@ const gallery = document.querySelector('.gallery');
 const loadingInfo = document.querySelector('.loadingMessage');
 const searchButton = document.querySelector('.search_btn');
 loadingInfo.style.display = 'none';
-const NOMOREIMAGES = "We're sorry, but you've reached the end of search results.";
-const NOIMAGES ='Sorry, there are no images matching your search query. Please try again!'
-const ERROR = 'Sorry, something went wrong...'
+const NOMOREIMAGES =
+  "We're sorry, but you've reached the end of search results.";
+const NOIMAGES =
+  'Sorry, there are no images matching your search query. Please try again!';
+const ERROR = 'Sorry, something went wrong...';
 
-const error = (sms) => {
+const error = sms => {
   iziToast.error({
     title: 'Attention',
     message: sms,
@@ -66,7 +69,6 @@ form.addEventListener('submit', async e => {
     }
 
     lightbox.refresh();
-
   } catch (err) {
     loadingInfo.style.display = 'none';
     console.log(err);
@@ -109,3 +111,4 @@ searchButton.addEventListener('click', async e => {
     console.log(err);
   }
 });
+
