@@ -8,13 +8,10 @@ async function getImages(text, page, per_page) {
         image_type: 'photo',
         orientation: 'horizontal',
         safesearch: 'true',
-        page: page,
-        per_page: per_page,
+        page,
+        per_page,
       });
-   
-    const response = await axios.get(
-      `https://pixabay.com/api?${searchParams}&`
-    );
+    const response = await axios.get(`https://pixabay.com/api?${searchParams}`);
     return response.data;
   }
 
