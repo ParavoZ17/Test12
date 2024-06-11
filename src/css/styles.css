@@ -1,3 +1,4 @@
+
 * {
   box-sizing: border-box;
 }
@@ -90,11 +91,11 @@ margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
      gap: 24px;
+     margin-bottom: 25px;
 
 }
 
-.gallery-item {
-   
+.gallery-item { 
     width: 360px;
     height: 250px;
     border: black solid 1px;
@@ -125,4 +126,9 @@ margin: 0 auto;
   text-align: center ;
   padding: 20px 0;
   
+}
+.search_btn {
+  display: none;
+  margin: 0 auto;
+  padding: 10px;
 }
